@@ -26,7 +26,8 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	implementation 'com.google.guava:guava:33.4.0-jre'
+	implementation 'com.google.guava:guava:33.4.8-jre'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server:3.4.3'
 }
 
 tasks.named('test') {
