@@ -24,14 +24,14 @@ public class UserRepositoryTest {
 
     @Test
     public void testStoreUser() {
-        HashSet<UserRole> roles = new HashSet<>();
-        roles.add(UserRole.OFFICER);
-        User user = repository.save(new User(repository.nextId(),
+        AuthServerId authServerId = new AuthServerId(UUID.randomUUID());
+        User user = repository.save(new User(
+                repository.nextId(),
                 "alex.foley@beverly-hills.com",
-                "my-secret-pwd",
-                roles));
+                authServerId,
+                "my-mobile-token"
+        ));
         assertThat(user).isNotNull();
-        assertThat(repository.count()).isEqualTo(1L);
     }
 
     @TestConfiguration

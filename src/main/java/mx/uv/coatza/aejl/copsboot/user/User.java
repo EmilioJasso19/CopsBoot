@@ -8,34 +8,43 @@ import jakarta.validation.constraints.NotNull;
 import mx.uv.coatza.aejl.copsboot.orm.jpa.AbstractEntity;
 
 @Entity
-@Table(name = "user")
+@Table(name = "copsboot_user")
 public class User extends AbstractEntity<UserId> {
 
     private String email;
-    private String password;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @Enumerated(EnumType.STRING)
-    @NotNull
-    private Set<UserRole> roles;
+    @Convert(converter = AuthServerIdAttributeConverter.class)
+    private AuthServerId authServerId;
+
+    private String mobileToken;
 
     protected User() {
     }
 
-    public User(UserId id, String email, String password, Set<UserRole> roles) {
+    public User(UserId id, String email, AuthServerId authServerId, String mobileToken) {
         super(id);
         this.email = email;
-        this.password = password;
-        this.roles = roles;
+        this.authServerId = authServerId;
+        this.mobileToken = mobileToken;
     }
 
     public String getEmail() {
         return email;
     }
-    public String getPassword() {
-        return password;
+
+    public void setEmail(String email) {
+        this.email = email;
     }
-    public Set<UserRole> getRoles() {
-        return roles;
+
+    public AuthServerId getAuthServerId() {
+        return authServerId;
+    }
+
+    public void setAuthServerId(AuthServerId authServerId) {
+        this.authServerId = authServerId;
+    }
+
+    public String getMobileToken() {
+        return mobileToken;
     }
 }

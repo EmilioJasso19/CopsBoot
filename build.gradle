@@ -28,6 +28,9 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	implementation 'com.google.guava:guava:33.4.8-jre'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server:3.4.3'
+	implementation 'com.c4-soft.springaddons:spring-addons-starter-oidc:8.1.0'
+	implementation 'com.c4-soft.springaddons:spring-addons-starter-oidc-test:8.1.0'
+	testImplementation 'org.mockito:mockito-core:5.11.0'
 }
 
 tasks.named('test') {
