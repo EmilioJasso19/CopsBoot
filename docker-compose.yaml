@@ -1,6 +1,15 @@
 version: '3'
 services:
-    identity:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: copsbootdb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3307:3306"
+  identity:
       image: 'quay.io/keycloak/keycloak:22.0.1'
       entrypoint: /opt/keycloak/bin/kc.sh start-dev --import-realm
       ports:
