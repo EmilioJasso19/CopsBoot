@@ -1,7 +1,10 @@
-version: '3'
+version: '3.8'
+
 services:
   db:
     image: mysql:8.0
+    container_name: copsboot-db
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root_password
       MYSQL_DATABASE: copsbootdb
@@ -9,15 +12,43 @@ services:
       MYSQL_PASSWORD: password
     ports:
       - "3307:3306"
-  identity:
-      image: 'quay.io/keycloak/keycloak:22.0.1'
-      entrypoint: /opt/keycloak/bin/kc.sh start-dev --import-realm
-      ports:
-        - '8180:8080'
-      environment:
-        KEYCLOAK_LOGLEVEL: 'INFO'
-        KEYCLOAK_ADMIN: 'admin'
-        KEYCLOAK_ADMIN_PASSWORD: 'admin-secret'
-        KC_HOSTNAME: 'localhost'
-        KC_HEALTH_ENABLED: 'true'
-        KC_METRICS_ENABLED: 'true'
+    networks:
+      - copsboot-network
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:22.0.1
+    container_name: copsboot-keycloak
+    restart: always
+    command: start-dev --import-realm
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin-secret
+      KC_DB: dev-file
+      KC_HEALTH_ENABLED: 'true'
+      KC_METRICS_ENABLED: 'true'
+    ports:
+      - "8180:8080"
+    networks:
+      - copsboot-network
+
+  app:
+    image: emiliojasso19/copsboot:v1.0.1
+    container_name: copsboot-app
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+      - keycloak
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/copsbootdb
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://keycloak:8080/realms/copsboot
+    entrypoint: ["sh", "-c", "sleep 20 && java -jar app.jar"]
+    networks:
+      - copsboot-network
+
+networks:
+  copsboot-network:
+    driver: bridge
