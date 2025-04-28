@@ -1,5 +1,6 @@
 package mx.uv.coatza.aejl.copsboot.user.web;
 
+import jakarta.validation.Valid;
 import mx.uv.coatza.aejl.copsboot.user.AuthServerId;
 import mx.uv.coatza.aejl.copsboot.user.CreateUserParameters;
 import mx.uv.coatza.aejl.copsboot.user.User;
@@ -45,7 +46,7 @@ public class UserRestController {
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('OFFICER')")
     public UserDto createUser(@AuthenticationPrincipal Jwt jwt,
-                              @RequestBody CreateUserRequest request) {
+                              @Valid @RequestBody CreateUserRequest request) {
         CreateUserParameters parameters = request.toParameters(jwt);
         User user = userService.createUser(parameters);
         return UserDto.fromUser(user);

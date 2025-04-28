@@ -9,4 +9,10 @@ public class UserId extends AbstractEntityId<UUID> {
     public UserId(UUID id) {
         super(id);
     }
+
+    // metodo necesario para buscar a un usuario por su id en
+    // UserService y asi poder relacionarlo con los reportes
+    public UUID getUuid() {
+        return getId();
+    }
 }
